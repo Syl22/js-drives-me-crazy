@@ -1,5 +1,4 @@
-import {Component, NgModule, OnInit} from '@angular/core';
-import {MyOwnCustomMaterialModule } from '../MyOwnCustomMaterialModule';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-auth',
@@ -8,8 +7,8 @@ import {MyOwnCustomMaterialModule } from '../MyOwnCustomMaterialModule';
 })
 
 export class AuthComponent implements OnInit {
-
-  constructor() { }
+  connected = false;
+  constructor(  ) { }
 
   ngOnInit() {
   }

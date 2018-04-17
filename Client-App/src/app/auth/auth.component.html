@@ -1,3 +1,23 @@
-<p>
-  auth works!
-</p>
+
+<form class="example-form">
+
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Adresse E-mail" >
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Mot de passe" type="password">
+  </mat-form-field>
+</form>
+
+<div *ngIf="connected">
+
+  <section class="mat-typography">
+    <h1>Connexion Google</h1>
+  </section>
+
+  <section class="mat-typography">
+    <h1>Connexion OneDrive</h1>
+  </section>
+
+</div>
