@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-auth',
@@ -8,9 +9,16 @@ import {Component, OnInit} from '@angular/core';
 
 export class AuthComponent implements OnInit {
   connected = false;
-  constructor(  ) { }
+  checkedG = false;
+  checkedO = false;
+  valInit = '';
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
-
+  public reinit() {
+    this.valInit = '';
+  }
 }

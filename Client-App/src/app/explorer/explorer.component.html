@@ -1,0 +1,37 @@
+
+<div class="section" >
+	<h2>My Folder</h2>
+	<div class="listE">
+		<div class="entetes"> Type</div>
+		<div class="entetes"> Name </div>
+		<div class="entetes"> Owner</div>
+		<div class="entetes"> Size</div>
+		<div class="entetes"> Last update</div>
+	</div>
+	<div class="finEntetes"></div>
+	<ul class="filetype">
+	  <li  *ngFor="let f of listeFichier"
+	  		[class.selected]="f === selectedFiletype"
+	  		(mouseover)="onSelect(f)" 
+	  		(mouseleave)="onLeave()" >
+	    <span class="badge">
+			<img *ngIf="f.isDirectory" class="img-icon" src="assets/images/folder-icon.png">
+			<img *ngIf="!f.isDirectory" class="img-icon" src="assets/images/file-icon.png">
+	    </span> {{f.name}}		{{f.size}} 
+	  </li>
+	</ul>
+</div>
+
+<div  class="section">
+<!--
+  isDirectory: boolean;
+  name: string;
+  size: number;
+  lastModified: string;
+  source: string;
+  hasReadWrite: boolean;
+  shared: string[];
+
+-->
+	<app-filetype-detail [selectedFiletype]="selectedFiletype"></app-filetype-detail>
+</div>
