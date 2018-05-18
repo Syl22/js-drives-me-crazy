@@ -7,3 +7,7 @@
 .example-full-width {
   width: 100%;
 }
+.content{
+  text-align: center;
+  margin: auto;
+}
