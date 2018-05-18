@@ -14,10 +14,14 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.file.*;
-
+import java.util.Arrays;
+import java.util.List;
 
 
 @Path("/redirect")
@@ -25,7 +29,7 @@ public class Redirect {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public Response redirect(@QueryParam("code") String code) throws URISyntaxException {
+    public Response redirect(@QueryParam("code") String code) throws URISyntaxException, IOException {
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.dropboxapi.com/oauth2/token");
@@ -44,8 +48,13 @@ public class Redirect {
 
         String access_token = rep.getString("access_token");
 
-        java.nio.file.Path file = Paths.get("access_token .txt");
-        Files.write(file, lines, Charset.forName("UTF-8"));
+        try {
+            FileWriter writer = new FileWriter("token.txt", true);
+            writer.write(access_token);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         URI url = new URI("http://localhost:8080/projet/commandes");
         return Response.status(Response.Status.TEMPORARY_REDIRECT).location(url).build();
@@ -56,7 +65,7 @@ public class Redirect {
                 .setParameter("access_token", code)
                 .buildQueryMessage();
         */
-
+    /*
 
         String entity = client.target("https://api.dropboxapi.com/2/users/get_current_account")
                 .request(MediaType.TEXT_PLAIN)
@@ -88,7 +97,7 @@ public class Redirect {
 */
 
 
-        return entity2;
+        //return entity2;
     }
 
 }
