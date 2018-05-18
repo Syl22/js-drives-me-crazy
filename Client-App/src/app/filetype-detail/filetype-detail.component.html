@@ -1,0 +1,18 @@
+<div *ngIf="selectedFiletype" class="content">
+	<h2>{{ selectedFiletype.name | uppercase }} Details</h2>
+	<div>
+		<span>Type: </span>
+			<img *ngIf="selectedFiletype.isDirectory" class="img-icon" src="assets/images/folder-icon.png">
+			<img *ngIf="!selectedFiletype.isDirectory" class="img-icon" src="assets/images/file-icon.png">
+	</div>
+	<div>
+	  <label>Name:
+	    <input [(ngModel)]="selectedFiletype.name" placeholder="name">
+	  </label>
+	</div>
+	<div><span>Size: </span>{{selectedFiletype.size }} Ko</div>
+	<div><span>Last modification: </span>{{selectedFiletype.lastModified }} </div>
+	<div><span>From: </span>{{selectedFiletype.source }}  </div>
+	<div><span>Rights: </span>{{selectedFiletype.hasReadWrite }} </div>
+	<div><span>Shared: </span>{{selectedFiletype.shared }} </div>
+</div>
