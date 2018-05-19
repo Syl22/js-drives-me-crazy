@@ -2,7 +2,8 @@ package esir.jxs;
 
 
 
-import org.json.*;
+import org.json.JSONObject;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,12 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.file.*;
-import java.util.Arrays;
-import java.util.List;
 
 
 @Path("/redirect")
@@ -29,7 +25,7 @@ public class Redirect {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public Response redirect(@QueryParam("code") String code) throws URISyntaxException, IOException {
+    public String redirect(@QueryParam("code") String code) throws URISyntaxException, IOException {
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.dropboxapi.com/oauth2/token");
@@ -56,8 +52,8 @@ public class Redirect {
             e.printStackTrace();
         }
 
-        URI url = new URI("http://localhost:8080/projet/commandes");
-        return Response.status(Response.Status.TEMPORARY_REDIRECT).location(url).build();
+
+        return access_token;
 
     	/* Requete pour google drive
     	OAuthClientRequest request = OAuthClientRequest
