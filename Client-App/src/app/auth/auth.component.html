@@ -1,23 +1,29 @@
+<div class="content">
 
-<form class="example-form">
+  <form class="example-form">
 
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Adresse E-mail" >
-  </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Adresse E-mail" [value] = "valInit" >
+    </mat-form-field>
 
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Mot de passe" type="password">
-  </mat-form-field>
-</form>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Mot de passe" type="password" [value] = "valInit" >
+    </mat-form-field>
+  </form>
+<mat-checkbox [(ngModel)]="checkedG" onclick="reinit()" > Connexion Google </mat-checkbox>
+<mat-checkbox [(ngModel)]="checkedO" onclick="reinit()" > Connexion Google </mat-checkbox>
+  <div >
 
-<div *ngIf="connected">
+    <section class="mat-typography" *ngIf="checkedG ">
+      <h1>Connexion Google</h1>
+      <button mat-raised-button color="accent"> Open </button>
+    </section>
 
-  <section class="mat-typography">
-    <h1>Connexion Google</h1>
-  </section>
+    <section class="mat-typography" *ngIf="checkedO ">
+      <h1>Connexion OneDrive</h1>
+      <button mat-raised-button color="accent"> Open </button>
+    </section>
 
-  <section class="mat-typography">
-    <h1>Connexion OneDrive</h1>
-  </section>
+  </div>
 
 </div>
