@@ -23,9 +23,10 @@ import java.net.URISyntaxException;
 @Path("/redirect")
 public class Redirect {
 
+	@Path("/dropbox")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String redirect(@QueryParam("code") String code) throws URISyntaxException, IOException {
+    public String redirect_dropbox(@QueryParam("code") String code) throws URISyntaxException, IOException {
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.dropboxapi.com/oauth2/token");
@@ -34,7 +35,7 @@ public class Redirect {
         form.param("code", code);
         form.param("client_id", "yzkdkdpqg1t8vio");
         form.param("client_secret", "tmuffan0nndwszf");
-        form.param("redirect_uri", "http://localhost:8080/projet/redirect");
+        form.param("redirect_uri", "http://localhost:8080/projet/redirect/dropbox");
 
         String reponse = target.request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
@@ -94,6 +95,39 @@ public class Redirect {
 
 
         //return entity2;
+    }
+    @Path("/onedrive")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String redirect_onedrive(@QueryParam("code") String code) throws URISyntaxException, IOException {
+
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("https://login.live.com/oauth20_token.srf");
+        Form form = new Form();
+        form.param("grant_type", "authorization_code");
+        form.param("code", code);
+        form.param("client_id", "04060989-d1ab-4e39-a106-610eedc4c893");
+        form.param("client_secret", "ytazTWIRH3246#^afzIR2#{");
+        form.param("redirect_uri", "http://localhost:8080/projet/redirect/onedrive");
+
+        String reponse = target.request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                        String.class);
+
+        JSONObject rep = new JSONObject(reponse);
+
+        String access_token = rep.getString("access_token");
+
+        try {
+            FileWriter writer = new FileWriter("token_ondrive.txt", false);
+            writer.write(access_token);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return access_token;
     }
 
 }

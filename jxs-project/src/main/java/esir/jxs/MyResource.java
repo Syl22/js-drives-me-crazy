@@ -9,20 +9,35 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
-/**
- * Root resource (exposed at "myresource" path)
- */
-@Path("myresource")
+
+@Path("/auth")
 public class MyResource {
 
+	@Path("/dropbox")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getIt() throws Exception {
+    public Response auth_dropbox() throws Exception {
         OAuthClientRequest request = OAuthClientRequest
                 .authorizationLocation("https://www.dropbox.com/oauth2/authorize")
                 .setClientId("yzkdkdpqg1t8vio")
                 .setResponseType("code")
-                .setRedirectURI("http://localhost:8080/projet/redirect")
+                .setRedirectURI("http://localhost:8080/projet/redirect/dropbox")
+                .buildQueryMessage();
+
+        URI url = new URI(request.getLocationUri());
+        return Response.status(Response.Status.TEMPORARY_REDIRECT).location(url).build();
+    }
+    
+    @Path("/onedrive")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response auth_onedrive() throws Exception {
+        OAuthClientRequest request = OAuthClientRequest
+                .authorizationLocation("https://login.live.com/oauth20_authorize.srf")
+                .setClientId("04060989-d1ab-4e39-a106-610eedc4c893")
+                .setScope("files.readwrite")
+                .setResponseType("code")
+                .setRedirectURI("http://localhost:8080/projet/redirect/onedrive")
                 .buildQueryMessage();
 
         URI url = new URI(request.getLocationUri());
