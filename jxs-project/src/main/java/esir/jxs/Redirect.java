@@ -45,7 +45,7 @@ public class Redirect {
         String access_token = rep.getString("access_token");
 
         try {
-            FileWriter writer = new FileWriter("token.txt", true);
+            FileWriter writer = new FileWriter("token.txt", false);
             writer.write(access_token);
             writer.close();
         } catch (IOException e) {

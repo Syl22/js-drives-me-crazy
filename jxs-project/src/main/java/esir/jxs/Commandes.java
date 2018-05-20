@@ -68,7 +68,7 @@ public class Commandes {
 
 
     @GET
-    @Path("/deletefile")
+    @Path("/delete")
     @Produces(MediaType.TEXT_PLAIN)
     public Response supprimerFichier(@QueryParam("path") String path) throws Exception {
         String access_token="";
@@ -88,12 +88,63 @@ public class Commandes {
     }
 
     @GET
+    @Path("/move")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deplacerFichier(@QueryParam("frompath") String frompath, @QueryParam("topath") String topath) throws Exception {
+        String access_token="";
+        access_token = getString(access_token);
+
+        Client client = ClientBuilder.newClient();
+
+        String s = "{\"from_path\": \"/"+frompath+"\", \"to_path\": \"/"+topath+"\"}";
+        Response reponse = client.target("https://api.dropboxapi.com/2/files/move_v2")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .header("Authorization", "Bearer "+access_token)
+                .header("Content-Type", "application/json")
+                .post(Entity.json(s), Response.class);
+
+        return reponse;
+
+    }
+
+    @GET
+    @Path("/rename")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response renommerFichier(@QueryParam("path") String frompath, @QueryParam("newname") String name) throws Exception {
+        String access_token="";
+        access_token = getString(access_token);
+
+        Client client = ClientBuilder.newClient();
+
+        String[] tmp = frompath.split("\\/");
+        tmp[tmp.length - 1] = name;
+        String topath = tmp[0];
+
+        if(tmp.length>1){
+            for(int i = 1;i<=(tmp.length-1); i++){
+                topath+="/";
+                topath+=tmp[i];
+            }
+        }
+
+
+        String s = "{\"from_path\": \"/"+frompath+"\", \"to_path\": \"/"+topath+"\"}";
+        Response reponse = client.target("https://api.dropboxapi.com/2/files/move_v2")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .header("Authorization", "Bearer "+access_token)
+                .header("Content-Type", "application/json")
+                .post(Entity.json(s), Response.class);
+
+        return reponse;
+
+    }
+
+    @GET
     @Path("/upload")
     @Produces(MediaType.TEXT_PLAIN)
     public Response upload(@QueryParam("path") String path) throws Exception {
         String access_token="";
         access_token = getString(access_token);
-
 
         //FileDataBodyPart filePart = new FileDataBodyPart("test", new File("C:/Users/Clément/Desktop/Images/cyka.jpg"));
         //FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
