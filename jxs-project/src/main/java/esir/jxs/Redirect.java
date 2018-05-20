@@ -2,12 +2,10 @@ package esir.jxs;
 
 
 
+import com.sun.jersey.api.container.filter.LoggingFilter;
 import org.json.JSONObject;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -37,12 +35,14 @@ public class Redirect {
         form.param("client_secret", "tmuffan0nndwszf");
         form.param("redirect_uri", "http://localhost:8080/projet/redirect/dropbox");
 
-        String reponse = target.request(MediaType.APPLICATION_JSON_TYPE)
+        Response reponse = target.request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-                        String.class);
+                        Response.class);
 
-        JSONObject rep = new JSONObject(reponse);
 
+        JSONObject rep = new JSONObject(reponse.readEntity(String.class));
+
+        System.out.println(rep);
         String access_token = rep.getString("access_token");
 
         try {
@@ -62,40 +62,9 @@ public class Redirect {
                 .setParameter("access_token", code)
                 .buildQueryMessage();
         */
-    /*
 
-        String entity = client.target("https://api.dropboxapi.com/2/users/get_current_account")
-                .request(MediaType.TEXT_PLAIN)
-                .header("Authorization", "Bearer "+access_token)
-                .post(null, String.class);
-
-        //JSONObject info = new JSONObject(entity);
-
-        String s = "{\"path\": \"/TESTEUH\"}";
-        String entity3 = client.target("https://api.dropboxapi.com/2/files/delete_v2")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .header("Authorization", "Bearer "+access_token)
-                .header("Content-Type", "application/json")
-                .post(Entity.json(s), String.class);
-
-        s = "{\"path\": \"\",\"recursive\": false}";
-        String entity2 = client.target("https://api.dropboxapi.com/2/files/list_folder")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .header("Authorization", "Bearer "+access_token)
-                .header("Content-Type", "application/json")
-                .post(Entity.json(s), String.class);
-/*
-        s = "{\"path\": \"/TESTEUH\",\"autorename\": false}";
-        String entity3 = client.target("https://api.dropboxapi.com/2/files/create_folder_v2")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .header("Authorization", "Bearer "+access_token)
-                .header("Content-Type", "application/json")
-                .post(Entity.json(s), String.class);
-*/
-
-
-        //return entity2;
     }
+
     @Path("/onedrive")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -110,16 +79,46 @@ public class Redirect {
         form.param("client_secret", "ytazTWIRH3246#^afzIR2#{");
         form.param("redirect_uri", "http://localhost:8080/projet/redirect/onedrive");
 
-        String reponse = target.request(MediaType.APPLICATION_JSON_TYPE)
+        Response reponse = target.request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-                        String.class);
+                        Response.class);
 
-        JSONObject rep = new JSONObject(reponse);
+        JSONObject rep = new JSONObject(reponse.readEntity(String.class));
 
         String access_token = rep.getString("access_token");
 
         try {
-            FileWriter writer = new FileWriter("token_ondrive.txt", false);
+            FileWriter writer = new FileWriter("token_onedrive.txt", false);
+            writer.write(access_token);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return access_token;
+    }
+
+
+    @Path("/google")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String redirect_googledrive(@QueryParam("access_token") String access_token) throws URISyntaxException, IOException {
+        System.out.println(access_token);
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("https://www.googleapis.com/oauth2/v3/tokeninfo");
+
+
+        Response reponse = target.queryParam("access_token", access_token)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get(Response.class);
+
+        System.out.println(reponse.readEntity(String.class));
+        JSONObject rep = new JSONObject(reponse.readEntity(String.class));
+
+
+        try {
+            FileWriter writer = new FileWriter("token_google.txt", false);
             writer.write(access_token);
             writer.close();
         } catch (IOException e) {
