@@ -4,10 +4,8 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.imageio.ImageIO;
+import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -25,7 +23,7 @@ public class Commandes {
     @GET
     @Path("/files")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response listeFichier() throws Exception {
+    public Response listeFichier(@DefaultValue("") @QueryParam("path") String path) throws Exception {
 
 
         String access_token="";
@@ -34,7 +32,11 @@ public class Commandes {
 
         Client client = ClientBuilder.newClient();
 
-        String s = "{\"path\": \"\",\"recursive\": false}";
+        String s = "{\"path\": \"";
+        if(!path.equals("")){
+            s+=("/");
+        }
+        s+=path+"\",\"recursive\": false}";
         Response entity2 = client.target("https://api.dropboxapi.com/2/files/list_folder")
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .header("Authorization", "Bearer "+access_token)
@@ -164,7 +166,46 @@ public class Commandes {
                 .post(Entity.entity(file, MediaType.APPLICATION_OCTET_STREAM));
 
         return reponse;
+    }
 
+    @GET
+    @Path("/download")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response download(@QueryParam("path") String path) throws Exception {
+        String access_token="";
+        access_token = getString(access_token);
+
+
+        Client client = ClientBuilder.newClient();
+
+        //File file = new File("C:\\\\Users\\Clément\\Desktop\\Images\\blyat.jpg");
+
+        String s = "{\"path\": \"/"+path+"\"}";
+        Response reponse = client.target("https://content.dropboxapi.com/2/files/download")
+                .request()
+                .header("Authorization", "Bearer "+access_token)
+                .header("Dropbox-API-Arg", s)
+                .post(null, Response.class);
+
+        return reponse;
+        //return reponse.ok((Object) file).header("Content-Disposition", "attachement; filename = test.jpg").build();
+    }
+
+    @GET
+    @Path("/space")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response space() throws Exception {
+        String access_token="";
+        access_token = getString(access_token);
+
+        Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+
+        Response reponse = client.target("https://api.dropboxapi.com/2/users/get_space_usage")
+                .request()
+                .header("Authorization", "Bearer "+access_token)
+                .post(null, Response.class);
+
+        return reponse;
     }
 
     private String getString(String access_token) {
