@@ -103,18 +103,23 @@ public class Redirect {
     @Path("/google")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String redirect_googledrive(@QueryParam("access_token") String access_token) throws URISyntaxException, IOException {
-        System.out.println(access_token);
+    public String redirect_googledrive(@QueryParam("code") String code) throws URISyntaxException, IOException {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("https://www.googleapis.com/oauth2/v3/tokeninfo");
+        WebTarget target = client.target("https://www.googleapis.com/oauth2/v4/token");
+        Form form = new Form();
+        form.param("grant_type", "authorization_code");
+        form.param("code", code);
+        form.param("client_id", "173933358409-cusgbsfge58miicjqagem1ifcas0do8j.apps.googleusercontent.com");
+        form.param("client_secret", "vlKKMm6YRWHukWjmgKKgMYoF");
+        form.param("redirect_uri", "http://localhost:8080/projet/redirect/google");
 
+        Response reponse = target.request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                        Response.class);
 
-        Response reponse = target.queryParam("access_token", access_token)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .get(Response.class);
-
-        System.out.println(reponse.readEntity(String.class));
         JSONObject rep = new JSONObject(reponse.readEntity(String.class));
+
+        String access_token = rep.getString("access_token");
 
 
         try {

@@ -58,7 +58,7 @@ public class MyResource {
                 .authorizationLocation("https://accounts.google.com/o/oauth2/v2/auth")
                 .setClientId("173933358409-cusgbsfge58miicjqagem1ifcas0do8j.apps.googleusercontent.com")
                 .setScope("https://www.googleapis.com/auth/drive")
-                .setResponseType("token")
+                .setResponseType("code")
                 .setRedirectURI("http://localhost:8080/projet/redirect/google")
                 .buildQueryMessage();
 
