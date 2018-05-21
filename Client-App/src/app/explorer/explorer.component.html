@@ -12,8 +12,8 @@
 	<ul class="filetype">
 	  <li  *ngFor="let f of listeFichier"
 	  		[class.selected]="f === selectedFiletype"
-	  		(mouseover)="onSelect(f)" 
-	  		(mouseleave)="onLeave()" >
+	  		(click)="onSelect(f)"> 
+	  		<!-- (mouseleave)="onLeave()" >-->
 	    <span class="badge">
 			<img *ngIf="f.isDirectory" class="img-icon" src="assets/images/folder-icon.png">
 			<img *ngIf="!f.isDirectory" class="img-icon" src="assets/images/file-icon.png">
