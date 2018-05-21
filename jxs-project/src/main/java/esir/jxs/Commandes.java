@@ -3,6 +3,8 @@ package esir.jxs;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.*;
@@ -16,9 +18,54 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Path("/commandes")
 public class Commandes {
+
+    @GET
+    @Path("/gfiles")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response listeGFichier(@DefaultValue("") @QueryParam("path") String path) throws Exception {
+
+
+        String access_token="";
+        access_token = getGString(access_token);
+
+
+        Client client = ClientBuilder.newClient();
+
+
+        Response entity2 = client.target("https://www.googleapis.com/drive/v3/files")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .header("Authorization", "Bearer "+access_token)
+                .get(Response.class);
+
+        return entity2;
+
+    }
+
+    @GET
+    @Path("/ofiles")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response listeOFichier(@DefaultValue("") @QueryParam("path") String path) throws Exception {
+
+
+        String access_token="";
+        access_token = getOString(access_token);
+
+
+        Client client = ClientBuilder.newClient();
+
+
+        Response entity2 = client.target("https://graph.microsoft.com/v1.0/me/drive/root:/Images:/children")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .header("Authorization", "Bearer "+access_token)
+                .get(Response.class);
+
+        return entity2;
+
+    }
 
     @GET
     @Path("/files")
@@ -225,6 +272,157 @@ public class Commandes {
             e.printStackTrace();
         }
         return access_token;
+    }
+
+    private String getGString(String access_token) {
+        try {
+            FileReader reader = new FileReader("token_google.txt");
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                access_token+=line;
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return access_token;
+    }
+
+    private String getOString(String access_token) {
+        try {
+            FileReader reader = new FileReader("token_onedrive.txt");
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                access_token+=line;
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return access_token;
+    }
+
+
+    private JSONObject parse(JSONObject dropbox, JSONObject google_drive, JSONObject onedrive){
+        JSONObject parseRes = new JSONObject();
+        boolean d = dropbox!=null;
+        boolean g = google_drive!=null;
+        boolean o = onedrive!=null;
+
+        ArrayList<String> entryList = new ArrayList<String>();
+        JSONArray resEntries = new JSONArray();
+
+        if(d) {
+            JSONArray entries = dropbox.getJSONArray("entries");
+            for (int i = 0; i < entries.length(); i++) {
+                JSONObject entry = entries.getJSONObject(i);
+                JSONObject resEntry = newEntry();
+                resEntry = parseEntry(entry, resEntry);
+                entryList.add(resEntry.getString("name"));
+                resEntries.put(resEntry);
+            }
+        }
+
+        if (g) {
+            JSONArray entries = dropbox.getJSONArray("files");
+            for (int i = 0; i < entries.length(); i++) {
+                JSONObject entry = entries.getJSONObject(i);
+                JSONObject resEntry = newEntry();
+                if(entryList.contains(entry.getString("name"))){
+                    int index = getInArray(resEntries, entry.getString("name"));
+                    resEntry = resEntries.getJSONObject(index);
+                    resEntries.remove(index);
+                    resEntry = parseFiles(entry, resEntry);
+                }
+                else{
+                    resEntry = parseFiles(entry, resEntry);
+                    entryList.add(resEntry.getString("name"));
+                }
+                resEntries.put(resEntry);
+            }
+        }
+
+        if (o){
+            JSONArray entries = dropbox.getJSONArray("value");
+            for (int i = 0; i < entries.length(); i++) {
+                JSONObject entry = entries.getJSONObject(i);
+                JSONObject resEntry = newEntry();
+                if(entryList.contains(entry.getString("name"))){
+                    int index = getInArray(resEntries, entry.getString("name"));
+                    resEntry = resEntries.getJSONObject(index);
+                    resEntries.remove(index);
+                    resEntry = parseValue(resEntry, resEntry);
+                }
+                else{
+                    resEntry = parseValue(resEntry, resEntry);
+                    entryList.add(resEntry.getString("name"));
+                }
+                resEntries.put(resEntry);
+            }
+        }
+
+        parseRes.put("entries", resEntries);
+
+        return parseRes;
+    }
+
+    private JSONObject parseEntry(JSONObject entry, JSONObject resEntry){
+        resEntry.put("name", entry.getString("name"));
+        resEntry.put("type", entry.getString(".tag"));
+        resEntry.put("path", entry.getString("path_display"));
+        resEntry.put("dropbox_id", entry.getString("id"));
+        if(entry.getString(".tag").equals("file")){
+            resEntry.put("size", entry.getString("size"));
+        }
+
+        return resEntry;
+    }
+
+    private JSONObject parseFiles(JSONObject entry, JSONObject resEntry){
+        resEntry.put("name", entry.getString("name"));
+        resEntry.put("googledrive_id", entry.getString("id"));
+
+        return resEntry;
+    }
+
+    private JSONObject parseValue(JSONObject entry, JSONObject resEntry){
+        resEntry.put("name", entry.getString("name"));
+        resEntry.put("onedrive_id", entry.getString("id"));
+        resEntry.put("size", entry.getString("size"));
+
+
+        return resEntry;
+    }
+
+    private JSONObject newEntry(){
+        JSONObject res = new JSONObject();
+        res.put("name", "");
+        res.put("type", "");
+        res.put("path", "");
+        res.put("size", "0");
+        res.put("dropbox_id", "");
+        res.put("onedrive_id", "");
+        res.put("googledrive_id", "");
+        return res;
+    }
+
+    private int getInArray(JSONArray entries, String name){
+        for(int i = 0; i < entries.length();i++){
+            if(entries.getJSONObject(i).getString("name").equals(name)){
+                return i;
+            }
+        }
+        return 0;
     }
 
 

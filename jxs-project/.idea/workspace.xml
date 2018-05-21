@@ -39,8 +39,12 @@
       <file leaf-file-name="Commandes.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/esir/jxs/Commandes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="18" lean-forward="true" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+            <state relative-caret-position="224">
+              <caret line="398" column="54" selection-start-line="398" selection-start-column="54" selection-end-line="398" selection-end-column="54" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#10346#10354#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -59,10 +63,10 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/token.txt" />
-        <option value="$PROJECT_DIR$/src/main/java/esir/jxs/Commandes.java" />
         <option value="$PROJECT_DIR$/token_ondrive.txt" />
         <option value="$PROJECT_DIR$/src/main/java/esir/jxs/MyResource.java" />
         <option value="$PROJECT_DIR$/src/main/java/esir/jxs/Redirect.java" />
+        <option value="$PROJECT_DIR$/src/main/java/esir/jxs/Commandes.java" />
       </list>
     </option>
   </component>
@@ -231,12 +235,12 @@
       <workItem from="1526739687462" duration="3081000" />
       <workItem from="1526743162878" duration="5480000" />
       <workItem from="1526822817210" duration="14885000" />
-      <workItem from="1526910771661" duration="528000" />
+      <workItem from="1526910771661" duration="8591000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34617000" />
+    <option name="totallyTimeSpent" value="42680000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
@@ -305,6 +309,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="35" column="12" selection-start-line="35" selection-start-column="12" selection-end-line="35" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10346#10354#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -312,6 +320,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1683">
           <caret line="99" column="10" selection-start-line="99" selection-start-column="10" selection-end-line="99" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10346#10354#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -336,6 +348,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1547">
           <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10346#10354#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -360,6 +376,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1224">
           <caret line="72" column="44" selection-start-line="72" selection-start-column="44" selection-end-line="72" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10346#10354#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -425,8 +445,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/esir/jxs/Commandes.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="18" lean-forward="true" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+        <state relative-caret-position="224">
+          <caret line="398" column="54" selection-start-line="398" selection-start-column="54" selection-end-line="398" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10346#10354#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
