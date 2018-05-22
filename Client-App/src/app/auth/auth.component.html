@@ -1,28 +1,18 @@
 <div class="content">
 
-  <form class="example-form">
+  <div>
 
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="Adresse E-mail" [value] = "valInit" >
-    </mat-form-field>
+    <button mat-raised-button color="accent"
+            onclick="window.location.href='http://localhost:8080/projet/auth/google'"
+            target="_blank"> Connexion Google Drive </button>
 
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="Mot de passe" type="password" [value] = "valInit" >
-    </mat-form-field>
-  </form>
-<mat-checkbox [(ngModel)]="checkedG" onclick="reinit()" > Connexion Google </mat-checkbox>
-<mat-checkbox [(ngModel)]="checkedO" onclick="reinit()" > Connexion Google </mat-checkbox>
-  <div >
+    <button mat-raised-button color="accent"
+            onclick="window.location.href='http://localhost:8080/projet/auth/onedrive'"
+            target="_blank"> Connexion OneDrive </button>
 
-    <section class="mat-typography" *ngIf="checkedG ">
-      <h1>Connexion Google</h1>
-      <button mat-raised-button color="accent"> Open </button>
-    </section>
-
-    <section class="mat-typography" *ngIf="checkedO ">
-      <h1>Connexion OneDrive</h1>
-      <button mat-raised-button color="accent"> Open </button>
-    </section>
+    <button mat-raised-button color="accent"
+            onclick="window.location.href='http://localhost:8080/projet/auth/dropbox'"
+            target="_blank"> Connexion DropBox </button>
 
   </div>
 

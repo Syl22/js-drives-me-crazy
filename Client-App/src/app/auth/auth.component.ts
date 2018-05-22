@@ -1,5 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {MatDialog} from '@angular/material';
+
+export interface Token {
+  tokenString: string;
+}
 
 @Component({
   selector: 'app-auth',
@@ -7,18 +12,38 @@ import {MatDialog} from '@angular/material';
   styleUrls: ['./auth.component.css']
 })
 
+@Injectable()
 export class AuthComponent implements OnInit {
-  connected = false;
-  checkedG = false;
-  checkedO = false;
-  valInit = '';
+  googleTokenUrl = 'http://localhost:8080/projet/redirect/google';
+  googleToken: Token;
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
   }
-  public reinit() {
-    this.valInit = '';
+
+  public checkConnexion(): boolean {
+    this.tokenHandler();
+    if(this.googleToken.tokenString != undefined){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public getGToken() {
+    return this.http.get<Token>(this.googleTokenUrl);
+  }
+
+  public tokenHandler() {
+    this.getGToken()
+      .subscribe((data: Token) => this.googleToken = {
+        tokenString: data['tokenString']
+      }, error => {
+        console.log(error);
+        this.tokenHandler();
+      });
   }
 }
