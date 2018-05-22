@@ -81,11 +81,8 @@ public class Commandes {
         	s="root:"+path+":/children";
         }
 
-<<<<<<< HEAD
-        return client.target("https://graph.microsoft.com/v1.0/me/drive/root:/Images:/children")
-=======
-        Response entity2 = client.target("https://graph.microsoft.com/v1.0/me/drive/"+s)
->>>>>>> b0b93355fe8b75576f2dd3117798ff459b5e1980
+
+        return client.target("https://graph.microsoft.com/v1.0/me/drive/"+s)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .header("Authorization", "Bearer "+access_token)
                 .get(Response.class);
