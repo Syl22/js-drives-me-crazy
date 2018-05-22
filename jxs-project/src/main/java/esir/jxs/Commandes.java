@@ -57,8 +57,15 @@ public class Commandes {
 
         Client client = ClientBuilder.newClient();
 
+        String s;
+        if(path.equals("")){
+            s="root/children";
+        }
+        else {
+        	s="root:"+path+":/children";
+        }
 
-        Response entity2 = client.target("https://graph.microsoft.com/v1.0/me/drive/root:/Images:/children")
+        Response entity2 = client.target("https://graph.microsoft.com/v1.0/me/drive/"+s)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .header("Authorization", "Bearer "+access_token)
                 .get(Response.class);
