@@ -11,6 +11,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URI;
 
 
@@ -64,5 +69,72 @@ public class MyResource {
 
         URI url = new URI(request.getLocationUri());
         return Response.status(Response.Status.TEMPORARY_REDIRECT).location(url).build();
+    }
+    
+    @Path("/deco")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public void deconnexion() throws Exception {
+        
+    	String tokenDropbox=getString("token.txt");
+    	String tokenGoogle=getString("token_google.txt");
+    	String tokenOneDrive=getString("token_onedrive.txt");
+
+    	if (tokenDropbox != "") {
+	    	Client client = ClientBuilder.newClient();
+	
+	        Response entity = client.target("https://api.dropboxapi.com/2/auth/token/revoke")
+	                .request(MediaType.APPLICATION_JSON_TYPE)
+	                .header("Authorization", "Bearer "+tokenDropbox)
+	                .post(null, Response.class);
+	        
+	        File fichier = new File("token.txt");
+	        fichier.delete();
+    	}
+    	
+    	if (tokenGoogle != "") {
+    		Client client = ClientBuilder.newClient();
+    		
+	        Response entity = client.target("https://accounts.google.com/o/oauth2/revoke?token="+tokenGoogle)
+	                .request(MediaType.APPLICATION_JSON_TYPE)
+	                .header("Content-Type", "application/x-www-form-urlencoded")
+	                .get();
+	        
+	        File fichier = new File("token_google.txt");
+	        fichier.delete();
+    	}
+    	
+    	if (tokenOneDrive != "") {
+	    	Client client = ClientBuilder.newClient();
+	    	
+	        Response entity = client.target("https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:8080/projet/redirect")
+	                .request(MediaType.APPLICATION_JSON_TYPE)
+	                .get();
+	        
+	        File fichier = new File("token_onedrive.txt");
+	        fichier.delete();
+    	}	
+        
+        
+    }
+    
+    private String getString(String fichier) {
+    	String access_token="";
+    	try {
+            FileReader reader = new FileReader(fichier);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                access_token+=line;
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return access_token;
     }
 }
